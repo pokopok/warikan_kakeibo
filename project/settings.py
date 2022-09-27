@@ -17,7 +17,7 @@ except ImportError:
 if not DEBUG:
     SECRET_KEY = os.environ['SECRET_KEY']
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['122.131.254.89', 'localhost']
 
 DATABASES = {
     'default': {
