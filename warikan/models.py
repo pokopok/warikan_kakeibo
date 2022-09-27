@@ -1,5 +1,5 @@
 from django.db import models
-from datetime import date
+from django.utils import timezone
 from django.contrib.auth.models import User
 
 class Users(models.Model):
@@ -18,7 +18,7 @@ class Categories(models.Model):
         return self.name
 
 class Expenses(models.Model):
-    date = models.DateField(default=date.today())
+    date = models.DateField(default=timezone.now)
     payer = models.ForeignKey(
         Users, on_delete=models.CASCADE
     )
