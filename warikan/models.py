@@ -1,3 +1,35 @@
 from django.db import models
+from datetime import date
+from django.contrib.auth.models import User
 
-# Create your models here.
+class Users(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+
+    def __str__(self):
+        return self.user.username
+
+class Categories(models.Model):
+    name = models.CharField(max_length=20)
+
+    class Meta:
+        db_table = 'categories'
+
+    def __str__(self):
+        return self.name
+
+class Expenses(models.Model):
+    date = models.DateField(default=date.today())
+    payer = models.ForeignKey(
+        Users, on_delete=models.CASCADE
+    )
+    category = models.ForeignKey(
+        Categories, on_delete=models.CASCADE
+    )
+    price = models.IntegerField()
+    memo = models.CharField(max_length=30, blank=True)
+
+    class Meta:
+        db_table = 'expenses'
+
+    def __str__(self):
+        return self.date

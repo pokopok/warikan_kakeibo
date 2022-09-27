@@ -1,0 +1,11 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="content-top">
+    <h1 class="page-title">支出一覧</h1>
+</div>
+<ul>
+    {% for object in object_list %}
+    <li>{{ object.date }} {{ object.payer }} {{ object.category }} {{ object.price }}</li>
+    {% endfor %}
+</ul>
+{% endblock %}
