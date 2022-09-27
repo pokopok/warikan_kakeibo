@@ -1,5 +1,4 @@
 from pathlib import Path
-import environ
 import os
 
 
@@ -7,17 +6,18 @@ import os
 BASE_DIR = Path(__file__).resolve().parent.parent
 TEMPLATE_DIR = os.path.join(BASE_DIR, 'templates')
 
-# 開発環境ではenvが読み込まれ、それ以外では環境変数が読み込まれる
+DEBUG = False
+
+# 開発環境ではlocal_settingsが読み込まれDEBUGがTrueになる
 try:
-    env = environ.Env()
-    env.read_env(os.path.join(BASE_DIR, '.env'))
-    SECRET_KEY = env('SECRET_KEY')
-    DEBUG = bool(int(env('DEBUG')))
-    ALLOWED_HOSTS = env.list('ALLOWED_HOSTS')
+  from .local_settings import *
 except ImportError:
+  pass
+
+if not DEBUG:
     SECRET_KEY = os.environ['SECRET_KEY']
-    DEBUG = False
-    ALLOWED_HOSTS = []
+
+ALLOWED_HOSTS = []
 
 DATABASES = {
     'default': {
