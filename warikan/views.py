@@ -1,11 +1,11 @@
 from django.shortcuts import render
 from django.views.generic.base import TemplateView
 from django.views.generic.edit import CreateView
+from django.views.generic.list import ListView
 from .models import Expenses
 from warikan.models import Expenses
 from .forms import UserLoginForm
 from django.contrib.auth.views import LoginView, LogoutView
-from django.views.generic.base import RedirectView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
 
@@ -43,3 +43,12 @@ class ExpensesAddView(LoginRequiredMixin, CreateView):
         form.fields['price'].label = '金額'
         form.fields['memo'].label = 'メモ'
         return form
+
+class ExpensesDataView(LoginRequiredMixin, ListView):
+    model = Expenses
+    template_name = 'expenses_list.html'
+
+    # def get_queryset(self):
+    #     qs = super(ExpensesDataView, self).get_queryset()
+    #     qs = qs.filter(user=self.request.user)
+    #     return qs
