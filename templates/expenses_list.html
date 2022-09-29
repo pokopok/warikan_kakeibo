@@ -1,11 +1,43 @@
 {% extends 'base.html' %}
 {% block content %}
+
 <div class="content-top">
     <h1 class="page-title">支出一覧</h1>
 </div>
-<ul>
+<!-- 検索フォーム -->
+<form class="mt-2" id="search-form" action="" method="GET">
+    <div>
+        <label class="label mr-4">年月</label>
+        {{ search_form.year }}
+        {{ search_form.month }}
+    </div>
+    <div>
+        <label class="label mr-4">カテゴリー</label>
+        {{ search_form.category }}
+    </div>
+    <div>
+        <label class="label mr-4">支払者</label>
+        {{ search_form.payer }}
+    </div>
+    <div>
+        {{ search_form.key_word }}
+    </div>
+    <button class="btn btn-info ml-4" type="submit">検索</button>
+</form>
+
+
+<table class="list-table">
+    <tr>
+        <th>日付</th><th>支払者</th><th>カテゴリー</th><th>金額</th><th>メモ</th>
+    </tr>
     {% for object in object_list %}
-    <li>{{ object.date }} {{ object.payer }} {{ object.category }} {{ object.price }}</li>
+    <tr>
+        <td>{{ object.date }}</td>
+        <td>{{ object.payer }}</td>
+        <td>{{ object.category }}</td>
+        <td>{{ object.price }}</td>
+        <td>{{ object.memo }}</td>
+    </tr>
     {% endfor %}
-</ul>
+</table>
 {% endblock %}
