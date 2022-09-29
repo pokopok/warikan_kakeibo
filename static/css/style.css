@@ -1,0 +1,16 @@
+.list-table {
+    width: 100%;
+    text-align: center;
+    border-collapse: collapse;
+    border-spacing: 0;
+    border-top: solid 1px #778ca3;
+    margin-top: 1rem;
+   }
+   .list-table tr:nth-child(2n+1) {
+    background: #e9faf9;
+   }
+   .list-table th,
+   .list-table td {
+    padding: 5px;
+    border-bottom: solid 1px #778ca3;
+   }
