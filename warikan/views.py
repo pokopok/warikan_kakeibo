@@ -44,13 +44,13 @@ class ExpensesAddView(LoginRequiredMixin, CreateView):
         form.fields['memo'].label = 'メモ'
         return form
 
-class ExpensesDataView(LoginRequiredMixin, ListView):
+class ExpensesListView(LoginRequiredMixin, ListView):
     model = Expenses
     template_name = 'expenses_list.html'
     ordering = '-date'
 
     def get_queryset(self):
-        qs = super(ExpensesDataView, self).get_queryset()
+        qs = super(ExpensesListView, self).get_queryset()
         self.form = form = ExpensesSearchForm(self.request.GET or None)
 
         if form.is_valid():
@@ -88,4 +88,36 @@ class ExpensesDataView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['search_form'] = self.form
         
+        return context
+
+
+class MonthDashboard(TemplateView):
+    template_name = 'month_dashboard.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        year = int(self.kwargs.get('year'))
+        month = int(self.kwargs.get('month'))
+
+        # 前月と次月を設定
+        if month == 1:
+            pre_month_year = year - 1
+            pre_month_month = 12
+        else:
+            pre_month_year = year
+            pre_month_month = month - 1
+        
+        if month == 12:
+            next_month_year = year + 1
+            next_month_month = 1
+        else:
+            next_month_year = year
+            next_month_month = month + 1
+
+        context['year_month'] = f'{year}年{month}月'
+        context['pre_month_year'] = pre_month_year
+        context['pre_month_month'] = pre_month_month
+        context['next_month_year'] = next_month_year
+        context['next_month_month'] = next_month_month
+
         return context

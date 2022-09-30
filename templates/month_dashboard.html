@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="month-pager">
+    <a href="{% url 'warikan:month_dashboard' year=pre_month_year month=pre_month_month %}">
+        前月
+    </a>
+    <span class="ms-4 me-4">{{ year_month }}</span>
+    <a href="{% url 'warikan:month_dashboard' year=next_month_year month=next_month_month %}">
+        次月
+    </a>
+</div>
+{% endblock %}

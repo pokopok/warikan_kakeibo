@@ -8,5 +8,6 @@ urlpatterns = [
     path('login/', views.LoginView.as_view(), name='login'),
     path('logout/', views.LogoutView.as_view(), name='logout'),
     path('expenses_add/', views.ExpensesAddView.as_view(), name='expenses_add'),
-    path('expenses_data/', views.ExpensesDataView.as_view(), name='expenses_list'),
+    path('expenses_data/', views.ExpensesListView.as_view(), name='expenses_list'),
+    path('month_dashboard/<int:year>/<int:month>/', views.MonthDashboard.as_view(), name='month_dashboard'),
 ]
