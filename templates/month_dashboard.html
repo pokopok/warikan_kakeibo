@@ -1,0 +1,45 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+<div class="month-pager">
+    <a href="{% url 'warikan:month_dashboard' year=pre_month_year month=pre_month_month %}">
+        前月
+    </a>
+    <span class="ms-4 me-4">{{ year_month }}</span>
+    <a href="{% url 'warikan:month_dashboard' year=next_month_year month=next_month_month %}">
+        次月
+    </a>
+</div>
+
+<div class="month-dash-page-top my-4">
+  <div class="left card">
+    <table class="table">
+      <tr>
+        <th>カテゴリ</th>
+        <th>金額</th>
+      </tr>
+      {% for key,value in table_set.items %}
+      <tr>
+        <td>{{ key }}</td>
+        <td>{{ value }}</td>
+      </tr>
+      {% endfor %}
+      <tr>
+        <td>Total</td>
+        <td>{{ total_expenses }}</td>
+      </tr>
+    </table>
+  </div>
+  
+  <div class="right ms-4">
+    {{ plot_pie|safe }}
+  </div>
+</div>
+<div class="month-dash-bottom">
+  <div>
+    {{ plot_bar|safe }}
+  </div>
+</div>
+{% endblock %}

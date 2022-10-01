@@ -14,3 +14,44 @@
     padding: 5px;
     border-bottom: solid 1px #778ca3;
    }
+
+/* --------------------------------
+ * 月間支出ダッシュボード
+ * -------------------------------- */
+ .month-pager {
+    text-align: center;
+    font-size: 1.6rem;
+  }
+  
+  .month-dash-page-top {
+    display: flex;
+    flex-direction: row;
+  }
+  
+  .left {
+    width: 40%;
+    padding: 0 5%;
+  }
+  
+  .right {
+    width: 60%;
+    padding: 0 5%;
+  }
+  
+  /* --------------------------------
+   * カード
+   * -------------------------------- */
+  .card {
+    margin-top: 2rem;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+    word-wrap: break-word;
+    background-color: #fff;
+    background-clip: border-box;
+    border: 1px solid rgba(0, 0, 0, 0.125);
+    border-radius: 0.3rem;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.26);
+    padding: 10px;
+  }

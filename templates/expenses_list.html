@@ -5,24 +5,24 @@
     <h1 class="page-title">支出一覧</h1>
 </div>
 <!-- 検索フォーム -->
-<form class="mt-2" id="search-form" action="" method="GET">
-    <div>
-        <label class="label mr-4">年月</label>
+<form class="my-3" id="search-form" action="" method="GET">
+    <div class="my-2">
+        <label class="label me-4">年月</label>
         {{ search_form.year }}
         {{ search_form.month }}
     </div>
-    <div>
-        <label class="label mr-4">カテゴリー</label>
+    <div class="my-3">
+        <label class="label me-4">カテゴリー</label>
         {{ search_form.category }}
     </div>
-    <div>
-        <label class="label mr-4">支払者</label>
+    <div class="my-3">
+        <label class="label me-4">支払者</label>
         {{ search_form.payer }}
     </div>
-    <div>
+    <div class="my-3">
         {{ search_form.key_word }}
     </div>
-    <button class="btn btn-info ml-4" type="submit">検索</button>
+    <button class="btn btn-info ms-4 my-3" type="submit">検索</button>
 </form>
 
 

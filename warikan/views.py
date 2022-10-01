@@ -8,6 +8,10 @@ from .forms import UserLoginForm, ExpensesSearchForm
 from django.contrib.auth.views import LoginView, LogoutView
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.urls import reverse
+import numpy as np
+import pandas as pd
+from django_pandas.io import read_frame
+from .plugin_plotly import GraphGenerator
 
 class HomeView(TemplateView):
     template_name = 'home.html'
@@ -44,13 +48,13 @@ class ExpensesAddView(LoginRequiredMixin, CreateView):
         form.fields['memo'].label = 'メモ'
         return form
 
-class ExpensesDataView(LoginRequiredMixin, ListView):
+class ExpensesListView(LoginRequiredMixin, ListView):
     model = Expenses
     template_name = 'expenses_list.html'
     ordering = '-date'
 
     def get_queryset(self):
-        qs = super(ExpensesDataView, self).get_queryset()
+        qs = super(ExpensesListView, self).get_queryset()
         self.form = form = ExpensesSearchForm(self.request.GET or None)
 
         if form.is_valid():
@@ -88,4 +92,74 @@ class ExpensesDataView(LoginRequiredMixin, ListView):
         context = super().get_context_data(**kwargs)
         context['search_form'] = self.form
         
+        return context
+
+
+class MonthDashboard(TemplateView):
+    template_name = 'month_dashboard.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        year = int(self.kwargs.get('year'))
+        month = int(self.kwargs.get('month'))
+
+        # 前月と次月を設定
+        if month == 1:
+            pre_month_year = year - 1
+            pre_month_month = 12
+        else:
+            pre_month_year = year
+            pre_month_month = month - 1
+        
+        if month == 12:
+            next_month_year = year + 1
+            next_month_month = 1
+        else:
+            next_month_year = year
+            next_month_month = month + 1
+
+        context['year_month'] = f'{year}年{month}月'
+        context['pre_month_year'] = pre_month_year
+        context['pre_month_month'] = pre_month_month
+        context['next_month_year'] = next_month_year
+        context['next_month_month'] = next_month_month
+
+        # Expensesモデルをdfにする
+        queryset = Expenses.objects.filter(date__year=year)
+        queryset = queryset.filter(date__month=month)
+        # クエリセットが何もない時はcontextを返す
+        if not queryset:
+            return context
+
+        df = read_frame(queryset,
+                        fieldnames=['date', 'price', 'category'])
+
+        print(df)
+        # グラフ作成クラスをインスタンス化
+        gen = GraphGenerator()
+
+        # 円グラフの素材を作成
+        df_pie = pd.pivot_table(df, index='category', values='price', aggfunc=np.sum)
+        pie_labels = list(df_pie.index.values)
+        pie_values = [val[0] for val in df_pie.values]
+        plot_pie = gen.month_pie(labels=pie_labels, values=pie_values)
+        context['plot_pie'] = plot_pie
+
+        print(plot_pie)
+
+        # テーブルでのカテゴリと金額の表示用。
+        # {カテゴリ:金額,カテゴリ:金額…}の辞書を作る
+        context['table_set'] = df_pie.to_dict()['price']
+
+        # totalの数字を計算して渡す
+        context['total_expenses'] = df['price'].sum()
+
+        # 日別の棒グラフの素材を渡す
+        df_bar = pd.pivot_table(df, index='date', values='price', aggfunc=np.sum)
+        dates = list(df_bar.index.values)
+        heights = [val[0] for val in df_bar.values]
+        plot_bar = gen.month_daily_bar(x_list=dates, y_list=heights)
+        context['plot_bar'] = plot_bar
+
+
         return context
