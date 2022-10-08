@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+{% autoescape off %}
+{{ transition_plot }}
+{% endautoescape %}
+
+{% endblock %}

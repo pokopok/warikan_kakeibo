@@ -163,3 +163,31 @@ class MonthDashboard(TemplateView):
 
 
         return context
+
+class TransitionView(TemplateView):
+    template_name = 'transition.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        expenses_queryset = Expenses.objects.all()
+
+        expenses_df = read_frame(expenses_queryset,
+                                fieldnames=['date', 'price'])
+        # 日付カラムをdatetime化して、Y-m表記に変換
+        expenses_df['date'] = pd.to_datetime(expenses_df['date'])
+        expenses_df['month'] = expenses_df['date'].dt.strftime('%Y-%m')
+        # 月ごとにpivot集計
+        expenses_df = pd.pivot_table(expenses_df, index='month', values='price', aggfunc=np.sum)
+        # x軸
+        months = list(expenses_df.index.values)
+        # y軸
+        expenses = [y[0] for y in expenses_df.values]
+
+        # グラフ生成
+        gen = GraphGenerator()
+        context['transition_plot'] = gen.transition_plot(x_list_expenses=months,
+                                                   y_list_expenses=expenses)
+        
+        print(expenses_df)
+
+        return context
