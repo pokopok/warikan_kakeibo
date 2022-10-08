@@ -12,6 +12,7 @@ import numpy as np
 import pandas as pd
 from django_pandas.io import read_frame
 from .plugin_plotly import GraphGenerator
+from django.contrib.messages.views import SuccessMessageMixin
 
 class HomeView(TemplateView):
     template_name = 'home.html'
@@ -26,14 +27,15 @@ class LogoutView(LogoutView):
     pass
 
 # 支出入力画面
-class ExpensesAddView(LoginRequiredMixin, CreateView):
+class ExpensesAddView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Expenses
     fields = ['date', 'payer', 'category', 'price', 'memo']
     template_name = 'expenses_add.html'
+    success_message = "支出を追加しました。"
 
     def get_success_url(self):
         form = super(ExpensesAddView, self).get_form()
-        return reverse('warikan:home')
+        return reverse('warikan:expenses_add')
 
     def form_valid(self, form): #フォーム送信前に実行される
         form.instance.user = self.request.user
@@ -161,5 +163,33 @@ class MonthDashboard(TemplateView):
         plot_bar = gen.month_daily_bar(x_list=dates, y_list=heights)
         context['plot_bar'] = plot_bar
 
+
+        return context
+
+class TransitionView(TemplateView):
+    template_name = 'transition.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        expenses_queryset = Expenses.objects.all()
+
+        expenses_df = read_frame(expenses_queryset,
+                                fieldnames=['date', 'price'])
+        # 日付カラムをdatetime化して、Y-m表記に変換
+        expenses_df['date'] = pd.to_datetime(expenses_df['date'])
+        expenses_df['month'] = expenses_df['date'].dt.strftime('%Y-%m')
+        # 月ごとにpivot集計
+        expenses_df = pd.pivot_table(expenses_df, index='month', values='price', aggfunc=np.sum)
+        # x軸
+        months = list(expenses_df.index.values)
+        # y軸
+        expenses = [y[0] for y in expenses_df.values]
+
+        # グラフ生成
+        gen = GraphGenerator()
+        context['transition_plot'] = gen.transition_plot(x_list_expenses=months,
+                                                   y_list_expenses=expenses)
+        
+        print(expenses_df)
 
         return context
