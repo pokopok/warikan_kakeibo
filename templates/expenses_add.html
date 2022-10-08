@@ -4,6 +4,11 @@
     <div class="content-top">
       <h1 class="page-title">支出の登録</h1>
     </div>
+    {% if messages %}
+      {% for message in messages %}
+      <p {% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</p>
+      {% endfor %}
+    {% endif %}
     <div class="form-container">
       <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}

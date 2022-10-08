@@ -12,6 +12,7 @@ import numpy as np
 import pandas as pd
 from django_pandas.io import read_frame
 from .plugin_plotly import GraphGenerator
+from django.contrib.messages.views import SuccessMessageMixin
 
 class HomeView(TemplateView):
     template_name = 'home.html'
@@ -26,14 +27,15 @@ class LogoutView(LogoutView):
     pass
 
 # 支出入力画面
-class ExpensesAddView(LoginRequiredMixin, CreateView):
+class ExpensesAddView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Expenses
     fields = ['date', 'payer', 'category', 'price', 'memo']
     template_name = 'expenses_add.html'
+    success_message = "支出を追加しました。"
 
     def get_success_url(self):
         form = super(ExpensesAddView, self).get_form()
-        return reverse('warikan:home')
+        return reverse('warikan:expenses_add')
 
     def form_valid(self, form): #フォーム送信前に実行される
         form.instance.user = self.request.user
