@@ -136,7 +136,6 @@ class MonthDashboard(TemplateView):
         df = read_frame(queryset,
                         fieldnames=['date', 'price', 'category'])
 
-        print(df)
         # グラフ作成クラスをインスタンス化
         gen = GraphGenerator()
 
@@ -146,8 +145,6 @@ class MonthDashboard(TemplateView):
         pie_values = [val[0] for val in df_pie.values]
         plot_pie = gen.month_pie(labels=pie_labels, values=pie_values)
         context['plot_pie'] = plot_pie
-
-        print(plot_pie)
 
         # テーブルでのカテゴリと金額の表示用。
         # {カテゴリ:金額,カテゴリ:金額…}の辞書を作る
@@ -162,7 +159,6 @@ class MonthDashboard(TemplateView):
         heights = [val[0] for val in df_bar.values]
         plot_bar = gen.month_daily_bar(x_list=dates, y_list=heights)
         context['plot_bar'] = plot_bar
-
 
         return context
 
@@ -189,7 +185,5 @@ class TransitionView(TemplateView):
         gen = GraphGenerator()
         context['transition_plot'] = gen.transition_plot(x_list_expenses=months,
                                                    y_list_expenses=expenses)
-        
-        print(expenses_df)
 
         return context

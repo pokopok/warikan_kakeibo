@@ -1,3 +1,40 @@
+/* --------------------------------
+ * 共通
+ * -------------------------------- */
+html {
+  font-size: 100%;
+}
+body{
+  line-height: 1.7;
+  color: #000;
+}
+a {
+  text-decoration: none;
+  color: #000;
+}
+img{
+  max-width: 100%;
+}
+
+.wrapper {
+  margin: 0 auto;
+  padding: 0 4%;
+}
+
+
+/* --------------------------------
+ * 支出追加
+ * -------------------------------- */
+
+/* form */
+.form-container {
+  margin:0 auto;
+}
+
+
+/* --------------------------------
+ * 支出一覧
+ * -------------------------------- */
 .list-table {
     width: 100%;
     text-align: center;
@@ -18,40 +55,53 @@
 /* --------------------------------
  * 月間支出ダッシュボード
  * -------------------------------- */
- .month-pager {
-    text-align: center;
-    font-size: 1.6rem;
-  }
+.month-pager {
+  text-align: center;
+  font-size: 1.6rem;
+}
   
-  .month-dash-page-top {
-    display: flex;
-    flex-direction: row;
-  }
+.month-dash-page-top {
+  display: flex;
+  flex-direction: row;
+}
+
+.left {
+  width: 40%;
+  padding: 0 5%;
+}
+
+.right {
+  width: 60%;
+  padding: 0 5%;
+}
   
-  .left {
-    width: 40%;
-    padding: 0 5%;
-  }
-  
-  .right {
-    width: 60%;
-    padding: 0 5%;
-  }
-  
-  /* --------------------------------
-   * カード
-   * -------------------------------- */
-  .card {
-    margin-top: 2rem;
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    min-width: 0;
-    word-wrap: break-word;
+/* --------------------------------
+  * カード
+  * -------------------------------- */
+.card {
+  margin-top: 2rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  word-wrap: break-word;
+  background-color: #fff;
+  background-clip: border-box;
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 0.3rem;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.26);
+  padding: 10px;
+}
+
+
+/* --------------------------------
+ * スマホ用
+ * -------------------------------- */
+@media (max-width: 600px) {
+  /* form */
+  .form-container {
+    margin:0;
     background-color: #fff;
-    background-clip: border-box;
-    border: 1px solid rgba(0, 0, 0, 0.125);
-    border-radius: 0.3rem;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.26);
-    padding: 10px;
+    padding: 0;
   }
+}
