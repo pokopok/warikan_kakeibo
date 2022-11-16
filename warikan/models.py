@@ -27,6 +27,7 @@ class Expenses(models.Model):
     )
     price = models.IntegerField()
     memo = models.CharField(max_length=30, blank=True)
+    is_warikan = models.BooleanField(default=False,help_text='割り勘対象ならTrue')
 
     class Meta:
         db_table = 'expenses'
