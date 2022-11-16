@@ -29,7 +29,7 @@ class LogoutView(LogoutView):
 # 支出入力画面
 class ExpensesAddView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
     model = Expenses
-    fields = ['date', 'payer', 'category', 'price', 'memo']
+    fields = ['date', 'payer', 'category', 'is_warikan', 'price', 'memo']
     template_name = 'expenses_add.html'
     success_message = "支出を追加しました。"
 
@@ -46,6 +46,7 @@ class ExpensesAddView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         form.fields['date'].label = '日付'
         form.fields['payer'].label = '支払者'
         form.fields['category'].label = 'カテゴリー'
+        form.fields['is_warikan'].label = '割り勘フラグ'
         form.fields['price'].label = '金額'
         form.fields['memo'].label = 'メモ'
         return form

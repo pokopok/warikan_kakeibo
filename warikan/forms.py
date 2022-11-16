@@ -62,3 +62,11 @@ class ExpensesSearchForm(forms.Form):
         queryset=Users.objects.order_by('user'),
         widget=forms.Select(attrs={'class': 'form'})
     )
+
+    # 支払者検索
+    is_warikan = forms.BooleanField(
+        label='割り勘かどうか',
+        required=False,
+        widget=forms.CheckboxInput(attrs={'class': 'check'})
+    )
+
