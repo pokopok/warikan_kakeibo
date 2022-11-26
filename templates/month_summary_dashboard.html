@@ -1,0 +1,88 @@
+{% extends 'base.html' %} {% block content %}
+
+<script src="https://cdn.plot.ly/plotly-latest.min.js"></script>
+
+<div class="expenses_add wrapper">
+  <div class="month-pager">
+    <a
+      href="{% url 'warikan:month_summary_dashboard' year=pre_month_year month=pre_month_month %}"
+    >
+      前月
+    </a>
+    <span class="ms-4 me-4">{{ year_month }}</span>
+    <a
+      href="{% url 'warikan:month_summary_dashboard' year=next_month_year month=next_month_month %}"
+    >
+      次月
+    </a>
+  </div>
+
+  <div class="month-dash-page-top my-4">
+    <div class="container-fluid">
+      <div class="row">
+        <p> 
+          割り勘　
+        </p>
+        <div class="col-2 summary_card_warikan">
+          <div class="card_title">
+            Total
+          </div>
+          <div class="centering_item_yen">
+              \ {{ total_warikan_expenses }}
+          </div>
+        </div>
+        <div class="col-3 summary_card_warikan">
+          <div class="card_title">
+            yusuke
+          </div>
+          <div class="centering_item_yen">
+          \ {{ yusuke_warikan_expenses }} <br />
+          \ {{ yusuke_warikan_diff }}
+          </div>    
+        </div>
+        <div class="col-3 summary_card_warikan">
+          <div class="card_title">
+            hinano
+          </div>
+          <div class="centering_item_yen">
+          \ {{ hinano_warikan_expenses }} <br />
+          \ {{ hinano_warikan_diff }}
+          </div>
+        </div>
+        <div class="col-2 ms-5 summary_card_warikan">
+          <div class="card_title">
+            凡例
+          </div>
+          <div class="centering_item_yen">
+          立て替え額 <br />
+          支払額
+          </div>
+        </div>
+      </div>
+      <div class="row">
+        <p> 
+          個人別
+        </p>
+        <div class="col-6 summary_card_personal">
+          <div class="card_title">
+            yusuke
+          </div>
+          <div class="centering_item_yen">
+          \ {{ yusuke_expenses }} 
+          </div>    
+        </div>
+        <div class="col-6 summary_card_personal">
+          <div class="card_title">
+            hinano
+          </div>
+          <div class="centering_item_yen">
+          \ {{ hinano_expenses }} 
+          </div>
+        </div>
+      </div>
+  </div>
+  <div class="month-dash-bottom">
+    <div>{{ plot_bar|safe }}</div>
+  </div>
+</div>
+{% endblock %}
