@@ -97,6 +97,56 @@ class ExpensesListView(LoginRequiredMixin, ListView):
         
         return context
 
+class Summarydashboard(TemplateView):
+    template_name = 'month_summary_dashboard.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        year = int(self.kwargs.get('year'))
+        month = int(self.kwargs.get('month'))
+
+        # 前月と次月を設定
+        if month == 1:
+            pre_month_year = year - 1
+            pre_month_month = 12
+        else:
+            pre_month_year = year
+            pre_month_month = month - 1
+        
+        if month == 12:
+            next_month_year = year + 1
+            next_month_month = 1
+        else:
+            next_month_year = year
+            next_month_month = month + 1
+
+        context['year_month'] = f'{year}年{month}月'
+        context['pre_month_year'] = pre_month_year
+        context['pre_month_month'] = pre_month_month
+        context['next_month_year'] = next_month_year
+        context['next_month_month'] = next_month_month
+
+        # Expensesモデルをdfにする
+        queryset = Expenses.objects.filter(date__year=year)
+        queryset = queryset.filter(date__month=month)
+        # クエリセットが何もない時はcontextを返す
+        if not queryset:
+            return context
+
+        df = read_frame(queryset,
+                        fieldnames=['date', 'payer', 'price', 'category' ,'is_warikan'])
+
+        # 割り勘の数字を計算して渡す
+        context['total_warikan_expenses'] = df['price'][df.is_warikan==True].sum()
+        context['yusuke_warikan_expenses'] = df['price'][(df.payer=='yusuke') & (df.is_warikan==True)].sum()
+        context['hinano_warikan_expenses'] = df['price'][(df.payer=='hinano') & (df.is_warikan==True)].sum()
+        context['yusuke_warikan_diff'] = ((context['total_warikan_expenses'])/2-context['yusuke_warikan_expenses']).astype('int')
+        context['hinano_warikan_diff'] = ((context['total_warikan_expenses'])/2-context['hinano_warikan_expenses']).astype('int')
+        # 個人の合計値を計算して渡す
+        context['yusuke_expenses'] = (df['price'][(df.payer=='yusuke') & (df.is_warikan==False)].sum()+(context['total_warikan_expenses'])/2).astype('int')
+        context['hinano_expenses'] = (df['price'][(df.payer=='hinano') & (df.is_warikan==False)].sum()+(context['total_warikan_expenses'])/2).astype('int')
+
+        return context
 
 class MonthDashboard(TemplateView):
     template_name = 'month_dashboard.html'
@@ -135,7 +185,7 @@ class MonthDashboard(TemplateView):
             return context
 
         df = read_frame(queryset,
-                        fieldnames=['date', 'price', 'category'])
+                        fieldnames=['date', 'payer', 'price', 'category' ,'is_warikan'])
 
         # グラフ作成クラスをインスタンス化
         gen = GraphGenerator()
@@ -153,6 +203,8 @@ class MonthDashboard(TemplateView):
 
         # totalの数字を計算して渡す
         context['total_expenses'] = df['price'].sum()
+
+        context['yusuke_expenses'] = df['price'][(df.payer=='yusuke') & (df.is_warikan==False)].sum()
 
         # 日別の棒グラフの素材を渡す
         df_bar = pd.pivot_table(df, index='date', values='price', aggfunc=np.sum)
