@@ -30,6 +30,9 @@
                 <a class="nav-link" href="{% url 'warikan:expenses_list' %}">支出一覧</a>
               </li>
               <li class="nav-item">
+                <a class="nav-link" href="{% url 'warikan:month_summary_dashboard' now_year now_month %}">サマリ</a>
+              </li>
+              <li class="nav-item">
                 <a class="nav-link" href="{% url 'warikan:month_dashboard' now_year now_month %}">月間支出</a>
               </li>
               <li class="nav-item">
