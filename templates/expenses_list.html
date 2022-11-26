@@ -16,6 +16,10 @@
         {{ search_form.category }}
     </div>
     <div class="my-3">
+        <label class="label me-4">割り勘フラグ</label>
+        {{ search_form.is_warikan }}
+    </div>
+    <div class="my-3">
         <label class="label me-4">支払者</label>
         {{ search_form.payer }}
     </div>
@@ -28,13 +32,14 @@
 
 <table class="list-table">
     <tr>
-        <th>日付</th><th>支払者</th><th>カテゴリー</th><th>金額</th><th>メモ</th>
+        <th>日付</th><th>支払者</th><th>カテゴリー</th><th>割り勘フラグ</th><th>金額</th><th>メモ</th>
     </tr>
     {% for object in object_list %}
     <tr>
         <td>{{ object.date }}</td>
         <td>{{ object.payer }}</td>
         <td>{{ object.category }}</td>
+        <td>{{ object.is_warikan }}</td>
         <td>{{ object.price }}</td>
         <td>{{ object.memo }}</td>
     </tr>

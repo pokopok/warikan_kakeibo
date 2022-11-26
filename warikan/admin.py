@@ -17,7 +17,7 @@ class ExpensesResource(resources.ModelResource):
 
 class ExpensesAdmin(ImportExportModelAdmin):
     search_fields = ('memo',)
-    list_display = ['date', 'payer', 'category', 'price', 'memo']
+    list_display = ['date', 'payer', 'category', 'is_warikan', 'price', 'memo']
     list_filter = ('category',)
     ordering = ('-date',)
 
