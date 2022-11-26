@@ -31,6 +31,10 @@ img{
   margin:0 auto;
 }
 
+.expenses_add_btn {
+  margin: 1rem 0;
+}
+
 
 /* --------------------------------
  * 支出一覧

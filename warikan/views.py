@@ -50,6 +50,11 @@ class ExpensesAddView(LoginRequiredMixin, SuccessMessageMixin, CreateView):
         form.fields['memo'].label = 'メモ'
         return form
 
+    def get_initial(self):
+        initial = super().get_initial()
+        initial["payer"] = self.request.user
+        return initial
+
 class ExpensesListView(LoginRequiredMixin, ListView):
     model = Expenses
     template_name = 'expenses_list.html'
