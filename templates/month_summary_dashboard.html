@@ -17,72 +17,71 @@
     </a>
   </div>
 
-  <div class="month-dash-page-top my-4">
-    <div class="container-fluid">
-      <div class="row">
-        <p> 
-          割り勘　
-        </p>
-        <div class="col-2 summary_card_warikan">
-          <div class="card_title">
-            Total
+  <div class="row">
+    <h1 class="display-6">割り勘</h1>
+
+    <div class="left">
+      <div class="summary_card_warikan">
+        <div class="card_title">Total</div>
+        <div class="centering_item_yen">\ {{ total_warikan_expenses }}</div>
+      </div>
+    </div>
+
+    <div class="right">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-5 summary_card_warikan">
+            <div class="card_title">Yusuke 立替額</div>
+            <div class="centering_item_yen">
+              \ {{ yusuke_warikan_expenses }}
+            </div>
           </div>
-          <div class="centering_item_yen">
-              \ {{ total_warikan_expenses }}
+          <div class="col-5 ms-3 summary_card_warikan">
+            <div class="card_title">Hinano 立替額</div>
+            <div class="centering_item_yen">
+              \ {{ hinano_warikan_expenses }}
+            </div>
           </div>
-        </div>
-        <div class="col-3 summary_card_warikan">
-          <div class="card_title">
-            yusuke
-          </div>
-          <div class="centering_item_yen">
-          \ {{ yusuke_warikan_expenses }} <br />
-          \ {{ yusuke_warikan_diff }}
-          </div>    
-        </div>
-        <div class="col-3 summary_card_warikan">
-          <div class="card_title">
-            hinano
-          </div>
-          <div class="centering_item_yen">
-          \ {{ hinano_warikan_expenses }} <br />
-          \ {{ hinano_warikan_diff }}
-          </div>
-        </div>
-        <div class="col-2 ms-5 summary_card_warikan">
-          <div class="card_title">
-            凡例
-          </div>
-          <div class="centering_item_yen">
-          立て替え額 <br />
-          支払額
+          <div class="row">
+            <div class="col-5 summary_card_warikan">
+              <div class="card_title">Yusuke 支払額</div>
+              <div class="centering_item_yen">\ {{ yusuke_warikan_diff }}</div>
+            </div>
+            <div class="col-5 ms-3 summary_card_warikan">
+              <div class="card_title">Hinano 支払額</div>
+              <div class="centering_item_yen">\ {{ hinano_warikan_diff }}</div>
+            </div>
           </div>
         </div>
       </div>
+    </div>
+
+    <div class="row">
+      <h1 class="display-6">個人別</h1>
       <div class="row">
-        <p> 
-          個人別
-        </p>
-        <div class="col-6 summary_card_personal">
-          <div class="card_title">
-            yusuke
-          </div>
-          <div class="centering_item_yen">
-          \ {{ yusuke_expenses }} 
-          </div>    
+        <div class="col-5 summary_card_personal">
+          <div class="card_title">Yusuke</div>
+          <div class="centering_item_yen">\ {{ yusuke_expenses }}</div>
         </div>
-        <div class="col-6 summary_card_personal">
-          <div class="card_title">
-            hinano
-          </div>
-          <div class="centering_item_yen">
-          \ {{ hinano_expenses }} 
-          </div>
+        <div class="col-5 ms-5 summary_card_personal">
+          <div class="card_title">Hinano</div>
+          <div class="centering_item_yen">\ {{ hinano_expenses }}</div>
         </div>
       </div>
+      <div class="row">
+        <div class="col-5 summary_card_personal">
+          <div class="card_title">Yusuke MOM</div>
+          <div class="centering_item_yen"> {{ yusuke_mom }} {{ yusuke_mom_percent }}%</div>
+        </div>
+        <div class="col-5 ms-5 summary_card_personal">
+          <div class="card_title">Hinano MOM</div>
+          <div class="centering_item_yen"> {{ hinano_mom }} {{ yusuke_mom_percent }}%</div>
+        </div>
+      </div>
+    </div>
   </div>
   <div class="month-dash-bottom">
     <div>{{ plot_bar|safe }}</div>
   </div>
+  {% endblock %}
 </div>
-{% endblock %}

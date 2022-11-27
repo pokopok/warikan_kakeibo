@@ -107,6 +107,9 @@ img{
   padding: 10px;
 }
 
+/* --------------------------------
+ * サマリダッシュボード用
+ * -------------------------------- */
 .summary_card_personal {
   position: relative;
   display: flex;
@@ -121,12 +124,19 @@ img{
   padding: 10px;
 }
 
-/* --------------------------------
- * カード
- * -------------------------------- */
 .centering_item_yen {
   text-align: center; 
   font-size: 15pt;
+}
+
+.summary_left{
+  width: 50%;
+  padding: 0 5%;
+}
+
+.summary_right {
+  width: 50%;
+  padding: 0 5%;
 }
 
 /* --------------------------------
