@@ -127,25 +127,40 @@ class Summarydashboard(TemplateView):
         context['next_month_month'] = next_month_month
 
         # Expensesモデルをdfにする
-        queryset = Expenses.objects.filter(date__year=year)
-        queryset = queryset.filter(date__month=month)
-        # クエリセットが何もない時はcontextを返す
-        if not queryset:
-            return context
-
-        df = read_frame(queryset,
+        # 当月
+        queryset_this_month = Expenses.objects.filter(date__year=year,date__month=month)
+        df_this_month = read_frame(queryset_this_month,
                         fieldnames=['date', 'payer', 'price', 'category' ,'is_warikan'])
+        queryset_this_month = Expenses.objects.filter(date__year=year,date__month=month)
+        # 前月
+        queryset_pre_month = Expenses.objects.filter(date__year=pre_month_year,date__month=pre_month_month)
+        df_pre_month = read_frame(queryset_pre_month,
+                        fieldnames=['date', 'payer', 'price', 'category' ,'is_warikan'])       
 
+        #df_this_month= df[(df.date__month==year)&(df.date__month==month)]
+        #当月
         # 割り勘の数字を計算して渡す
-        context['total_warikan_expenses'] = df['price'][df.is_warikan==True].sum()
-        context['yusuke_warikan_expenses'] = df['price'][(df.payer=='yusuke') & (df.is_warikan==True)].sum()
-        context['hinano_warikan_expenses'] = df['price'][(df.payer=='hinano') & (df.is_warikan==True)].sum()
+        context['total_warikan_expenses'] = df_this_month['price'][df_this_month.is_warikan==True].sum()
+        context['yusuke_warikan_expenses'] = df_this_month['price'][(df_this_month.payer=='yusuke') & (df_this_month.is_warikan==True)].sum()
+        context['hinano_warikan_expenses'] = df_this_month['price'][(df_this_month.payer=='hinano') & (df_this_month.is_warikan==True)].sum()
         context['yusuke_warikan_diff'] = ((context['total_warikan_expenses'])/2-context['yusuke_warikan_expenses']).astype('int')
         context['hinano_warikan_diff'] = ((context['total_warikan_expenses'])/2-context['hinano_warikan_expenses']).astype('int')
         # 個人の合計値を計算して渡す
-        context['yusuke_expenses'] = (df['price'][(df.payer=='yusuke') & (df.is_warikan==False)].sum()+(context['total_warikan_expenses'])/2).astype('int')
-        context['hinano_expenses'] = (df['price'][(df.payer=='hinano') & (df.is_warikan==False)].sum()+(context['total_warikan_expenses'])/2).astype('int')
+        context['yusuke_expenses'] = (df_this_month['price'][(df_this_month.payer=='yusuke') & (df_this_month.is_warikan==False)].sum()+(context['total_warikan_expenses'])/2).astype('int')
+        context['hinano_expenses'] = (df_this_month['price'][(df_this_month.payer=='hinano') & (df_this_month.is_warikan==False)].sum()+(context['total_warikan_expenses'])/2).astype('int')
 
+        #前月
+        total_warikan_expenses_pre_month = df_pre_month['price'][df_pre_month.is_warikan==True].sum()
+        yusuke_expenses_pre_month = (df_pre_month['price'][(df_pre_month.payer=='yusuke') & (df_pre_month.is_warikan==False)].sum()+total_warikan_expenses_pre_month/2).astype('int')
+        hinano_expenses_pre_month = (df_pre_month['price'][(df_pre_month.payer=='hinano') & (df_pre_month.is_warikan==False)].sum()+total_warikan_expenses_pre_month/2).astype('int')
+        yusuke_mom = context['yusuke_expenses'] - yusuke_expenses_pre_month
+        hinano_mom = context['hinano_expenses'] - hinano_expenses_pre_month
+        if yusuke_mom > 0:
+            context['yusuke_mom']=f'+{yusuke_mom}円'
+        if hinano_mom > 0:
+            context['hinano_mom']=f'+{hinano_mom}円'
+        context['yusuke_mom_percent'] = round(yusuke_mom / context['yusuke_expenses'],1)*100
+        context['hinano_mom_percent'] = round(hinano_mom / context['hinano_expenses'],1)*100
         return context
 
 class MonthDashboard(TemplateView):
